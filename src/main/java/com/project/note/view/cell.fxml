@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="rootAnchorPane" prefHeight="95.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label fx:id="titleLabel" layoutX="15.0" layoutY="10.0" prefHeight="33.0" prefWidth="244.0" text="Title" textFill="#424242">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+      </Label>
+
+      <Label fx:id="contentLabel" layoutX="134.0" layoutY="45.0" prefHeight="27.0" prefWidth="400.0" text="description" textFill="#7f7f7f" />
+
+      <Label fx:id="dateLabel" layoutX="15.0" layoutY="45.0" prefHeight="27.0" prefWidth="125.0" text="Date Created" textFill="#424242" />
+
+      <JFXButton fx:id="deleteButton" layoutX="650.0" layoutY="3.0" maxWidth="18.0" maxHeight="18.0" text="x" style="-fx-background-color: #d73a49; -fx-font-size: 12px" textFill="#ffffff" />
+   </children>
+</AnchorPane>

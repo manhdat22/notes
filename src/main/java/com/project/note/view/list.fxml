@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXListView?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.Blend?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" style="-fx-background-color: #ffffff;" fx:controller="com.project.note.controller.ListController">
+   <children>
+      <JFXListView fx:id="listNote" prefHeight="400.0" layoutX="0" layoutY="57.0" prefWidth="700.0" />
+
+      <AnchorPane layoutY="-6.0" prefHeight="63.0" prefWidth="700.0" style="-fx-background-color: #0170fe;">
+         <children>
+            <Label alignment="CENTER" layoutX="269.0" layoutY="11.0" prefHeight="41.0" prefWidth="163.0" text="TODO" textFill="WHITE">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <JFXButton fx:id="logOutButton" layoutX="11.0" layoutY="20.0" prefHeight="27.0" prefWidth="75.0"  text="Log Out" textFill="#ffffff" />
+            <JFXButton fx:id="addButton" layoutX="610.0" layoutY="20.0" prefHeight="27.0" prefWidth="75.0" text="Add New" textFill="#ffffff" />
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
