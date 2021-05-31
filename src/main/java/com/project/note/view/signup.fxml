@@ -12,25 +12,25 @@
    <children>
       <JFXTextField fx:id="signUpFirstName" focusColor="#0170fe" layoutX="186.0" layoutY="74.0" prefHeight="34.0" prefWidth="329.0" promptText="First Name" unFocusColor="#424242">
          <font>
-            <Font size="14.0" />
+            <Font size="14" />
          </font>
       </JFXTextField>
 
       <JFXTextField fx:id="signUpLastName" focusColor="#0170fe" layoutX="186.0" layoutY="123.0" prefHeight="34.0" prefWidth="329.0" promptText="Last name" unFocusColor="#424242">
          <font>
-            <Font size="14.0" />
+            <Font size="14" />
          </font>
       </JFXTextField>
 
       <JFXTextField fx:id="signUpUsername" focusColor="#0170fe" layoutX="186.0" layoutY="167.0" prefHeight="34.0" prefWidth="329.0" promptText="Username" unFocusColor="#424242">
          <font>
-            <Font size="14.0" />
+            <Font size="14" />
          </font>
       </JFXTextField>
 
       <JFXPasswordField fx:id="signUpPassword" focusColor="#0170fe" layoutX="186.0" layoutY="221.0" prefHeight="25.0" prefWidth="329.0" promptText="Password" unFocusColor="#424242">
          <font>
-            <Font size="14.0" />
+            <Font size="14" />
          </font>
       </JFXPasswordField>
 
@@ -42,7 +42,7 @@
 
       <AnchorPane layoutY="-6.0" prefHeight="63.0" prefWidth="700.0" style="-fx-background-color: #0170fe;">
          <children>
-            <Label alignment="CENTER" layoutX="269.0" layoutY="11.0" prefHeight="41.0" prefWidth="163.0" text="TODO" textFill="WHITE">
+            <Label alignment="CENTER" layoutX="269.0" layoutY="11.0" prefHeight="41.0" prefWidth="163.0" text="Notes" textFill="WHITE">
                <font>
                   <Font size="24.0" />
                </font>

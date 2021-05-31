@@ -5,8 +5,9 @@ import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXRadioButton;
 import com.jfoenix.controls.JFXTextField;
-import com.project.note.animations.Shaker;
 import com.project.note.database.DatabaseHandler;
+import com.project.note.helper.MD5;
+import com.project.note.helper.Shaker;
 import com.project.note.model.User;
 
 import javafx.fxml.FXML;
@@ -60,24 +61,18 @@ public class SignupController {
 
     @FXML
     void initialize() {
-
         signUpButton.setOnAction(event -> {
-
             createUser();
-
         });
 
         backButton.setOnAction(event -> {
-
             backToLogin(backButton);
-
         });
 
         ToggleGroup genderGroup = new ToggleGroup();
 
         signUpRadioButtonMale.setToggleGroup(genderGroup);
         signUpRadioButtonFemale.setToggleGroup(genderGroup);
-
     }
 
     private void backToLogin(JFXButton button) {
@@ -101,7 +96,6 @@ public class SignupController {
     }
 
     private void createUser() {
-
         String name = signUpFirstName.getText();
         String lastName = signUpLastName.getText();
         String userName = signUpUsername.getText();
@@ -131,11 +125,12 @@ public class SignupController {
         }
 
         DatabaseHandler databaseHandler = new DatabaseHandler();
-        User user = new User(name, lastName, userName, password, gender);
+        String encodedPW = MD5.encode(password);
+
+        User user = new User(name, lastName, userName, encodedPW, gender);
 
         databaseHandler.signUpUser(user);
 
         backToLogin(signUpButton);
     }
-
 }

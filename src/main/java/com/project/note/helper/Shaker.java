@@ -1,4 +1,4 @@
-package com.project.note.animations;
+package com.project.note.helper;
 
 import javafx.animation.TranslateTransition;
 import javafx.scene.Node;
@@ -13,7 +13,6 @@ public class Shaker {
         translateTransition.setByX(10f);
         translateTransition.setCycleCount(6);
         translateTransition.setAutoReverse(true);
-
     }
 
     public void shake() {

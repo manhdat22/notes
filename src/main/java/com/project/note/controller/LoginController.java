@@ -3,8 +3,9 @@ package com.project.note.controller;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
-import com.project.note.animations.Shaker;
 import com.project.note.database.DatabaseHandler;
+import com.project.note.helper.MD5;
+import com.project.note.helper.Shaker;
 import com.project.note.model.User;
 
 import javafx.fxml.FXML;
@@ -14,9 +15,11 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class LoginController {
@@ -47,13 +50,11 @@ public class LoginController {
 
     @FXML
     void initialize() {
-
         databaseHandler = new DatabaseHandler();
 
         loginButton.setOnAction(event -> {
-
             String loginText = loginUsername.getText().trim();
-            String loginPwd = loginPassword.getText().trim();
+            String loginPwd = MD5.encode(loginPassword.getText().trim());
 
             User user = new User();
             user.setUserName(loginText);
@@ -64,32 +65,23 @@ public class LoginController {
             int counter = 0;
 
             try {
-
                 while (userRow.next()) {
                     counter++;
-
-                    String name = userRow.getString("firstname");
                     userId = userRow.getInt("userid");
-
-                    System.out.println("Welcome! " + name);
                 }
 
                 if (counter == 1) {
                     setCurrentUserId(userId);
-                    showAddItemScreen();
+                    showListScreen();
                 } else {
                     shakeForm();
                 }
-
             } catch (Exception e) {
                 shakeForm();
             }
-
         });
 
         loginSignupButton.setOnAction(event -> {
-
-            // Take users to signup screen
             loginSignupButton.getScene().getWindow().hide();
 
             FXMLLoader loader = new FXMLLoader();
@@ -108,13 +100,11 @@ public class LoginController {
             stage.setResizable(false);
 
             stage.showAndWait();
-
         });
 
     }
 
-    private void showAddItemScreen() {
-        // Take users to AddItem screen
+    private void showListScreen() {
         loginSignupButton.getScene().getWindow().hide();
 
         FXMLLoader loader = new FXMLLoader();
@@ -146,7 +136,6 @@ public class LoginController {
 
     public void setCurrentUserId(int currentUserId) {
         this.currentUserId = currentUserId;
-        System.out.println("CurrentUserId " + this.currentUserId);
     }
 
     public int getCurrentUserId() {

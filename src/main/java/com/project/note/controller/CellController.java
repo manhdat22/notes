@@ -12,12 +12,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.Calendar;
 
 public class CellController extends JFXListCell<Note> {
@@ -40,12 +40,6 @@ public class CellController extends JFXListCell<Note> {
     @FXML
     public JFXButton deleteButton;
 
-    // @FXML
-    // private ImageView deleteButton;
-
-    // @FXML
-    // public ImageView listUpdateButton;
-
     private FXMLLoader fxmlLoader;
 
     private DatabaseHandler databaseHandler;
@@ -57,17 +51,15 @@ public class CellController extends JFXListCell<Note> {
 
     @Override
     public void updateItem(Note myNote, boolean empty) {
-
-        databaseHandler = new DatabaseHandler(); // main change
-
+        databaseHandler = new DatabaseHandler();
         super.updateItem(myNote, empty);
 
         if (empty || myNote == null) {
             setText(null);
             setGraphic(null);
         } else {
-
             if (fxmlLoader == null) {
+
                 fxmlLoader = new FXMLLoader(getClass().getResource("/com/project/note/view/cell.fxml"));
                 fxmlLoader.setController(this);
 
@@ -80,7 +72,7 @@ public class CellController extends JFXListCell<Note> {
 
             titleLabel.setText(myNote.getTitle());
             dateLabel.setText(String.format("%1$TD %1$TT", myNote.getDatecreated()));
-            contentLabel.setText(myNote.getContent());
+            contentLabel.setText(formatContent(myNote.getContent()));
 
             int taskId = myNote.getNoteId();
 
@@ -105,92 +97,32 @@ public class CellController extends JFXListCell<Note> {
                     updateNoteController.setTitleField(myNote.getTitle());
                     updateNoteController.setUpdateContentField(myNote.getContent());
 
-                    updateNoteController.updateNoteButton.setOnAction(event1 -> {
+                    updateNoteController.updateNoteButton.setOnAction(e -> {
+                        updateNoteController.updateNote(myNote);
+                        updateNoteController.updateNoteButton.getScene().getWindow().hide();
+                    });
 
-                        Calendar calendar = Calendar.getInstance();
+                    updateNoteController.saveAsLabel.setOnMouseClicked(e -> {
+                        updateNoteController.updateNote(myNote);
+                        updateNoteController.saveNoteToFile(stage);
 
-                        java.sql.Timestamp timestamp = new java.sql.Timestamp(calendar.getTimeInMillis());
-
-                        try {
-
-                            System.out.println("taskid " + myNote.getNoteId());
-
-                            databaseHandler.updateNote(timestamp, updateNoteController.getContent(),
-                                    updateNoteController.getTitle(), myNote.getNoteId());
-                            updateNoteController.updateNoteButton.getScene().getWindow().hide();
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        } catch (ClassNotFoundException e) {
-                            e.printStackTrace();
-                        }
-
+                        updateNoteController.updateNoteButton.getScene().getWindow().hide();
                     });
 
                     stage.show();
-
                 }
             });
 
-            // listUpdateButton.setOnMouseClicked(event -> {
-
-            // FXMLLoader loader = new FXMLLoader();
-            // loader.setLocation(getClass().getResource("/com/project/note/view/updateNoteForm.fxml"));
-
-            // try {
-            // loader.load();
-            // } catch (IOException e) {
-            // e.printStackTrace();
-            // }
-
-            // Parent root = loader.getRoot();
-            // Stage stage = new Stage();
-            // stage.setScene(new Scene(root));
-            // stage.setResizable(false);
-
-            // UpdateNoteController updateNoteController = loader.getController();
-            // updateNoteController.setNoteField(myNote.getTitle());
-            // updateNoteController.setUpdateContentField(myNote.getContent());
-
-            // updateNoteController.updateNoteButton.setOnAction(event1 -> {
-
-            // Calendar calendar = Calendar.getInstance();
-
-            // java.sql.Timestamp timestamp = new
-            // java.sql.Timestamp(calendar.getTimeInMillis());
-
-            // try {
-
-            // System.out.println("taskid " + myNote.getNoteId());
-
-            // databaseHandler.updateNote(timestamp, updateNoteController.getContent(),
-            // updateNoteController.getTitle(), myNote.getNoteId());
-
-            // // update our listController
-            // // updateNoteController.refreshList();
-            // } catch (SQLException e) {
-            // e.printStackTrace();
-            // } catch (ClassNotFoundException e) {
-            // e.printStackTrace();
-            // }
-
-            // });
-
-            // stage.show();
-
-            // });
-
             deleteButton.setOnAction(event -> {
                 try {
-
                     databaseHandler.deleteNote(LoginController.currentUserId, taskId);
-
                 } catch (SQLException e) {
                     e.printStackTrace();
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }
-                getListView().getItems().remove(getItem());
 
+                getListView().getItems().remove(getItem());
             });
 
             setText(null);
@@ -199,4 +131,7 @@ public class CellController extends JFXListCell<Note> {
         }
     }
 
+    private String formatContent(String content) {
+        return content.replace("\n", " ").replace("\r", " ");
+    }
 }

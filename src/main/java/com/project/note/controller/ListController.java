@@ -13,12 +13,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -26,6 +28,13 @@ import java.util.TimerTask;
 public class ListController {
 
     public static int userId;
+
+    private String name;
+
+    private String gender;
+
+    @FXML
+    private Label sceneTitle;
 
     @FXML
     private ImageView listRefreshButton;
@@ -50,11 +59,9 @@ public class ListController {
 
     private ObservableList<Note> notes;
 
-    private DatabaseHandler databaseHandler;
-
     @FXML
     void initialize() throws SQLException {
-        System.out.println("initialize called");
+        sceneTitle.setText(getSceneTitle());
 
         logOutButton.setOnAction(event -> {
             logOutButton.getScene().getWindow().hide();
@@ -77,8 +84,14 @@ public class ListController {
         });
 
         addButton.setOnAction(event -> {
-            addNewNote();
+            try {
+                addNewNote();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         });
+
+        refreshList();
 
         TimerTask note = new TimerTask() {
             @Override
@@ -97,9 +110,6 @@ public class ListController {
     }
 
     public void refreshList() throws SQLException {
-
-        System.out.println("Current list of User#" + LoginController.currentUserId);
-
         notes = FXCollections.observableArrayList();
 
         DatabaseHandler databaseHandler = new DatabaseHandler();
@@ -120,10 +130,8 @@ public class ListController {
         listNote.setCellFactory(CellController -> new CellController());
     }
 
-    public void addNewNote() {
+    public void addNewNote() throws SQLException {
         Note newNote = new Note();
-
-        DatabaseHandler databaseHandler = new DatabaseHandler();
 
         FXMLLoader loader = new FXMLLoader();
 
@@ -141,27 +149,51 @@ public class ListController {
         stage.setResizable(false);
 
         UpdateNoteController updateNoteController = loader.getController();
+
         updateNoteController.updateNoteButton.setOnAction(event -> {
-
-            Calendar calendar = Calendar.getInstance();
-
-            java.sql.Timestamp timestamp = new java.sql.Timestamp(calendar.getTimeInMillis());
-
-            System.out.println("taskid " + newNote.getNoteId());
-
-            newNote.setUserId(LoginController.currentUserId);
-            newNote.setTitle(updateNoteController.getTitle());
-            newNote.setContent(updateNoteController.getContent());
-            newNote.setDatecreated(timestamp);
-
-            databaseHandler.insertNote(newNote);
+            updateNoteController.createNote(newNote);
 
             updateNoteController.updateNoteButton.getScene().getWindow().hide();
+        });
 
+        updateNoteController.saveAsLabel.setOnMouseClicked(event -> {
+            updateNoteController.createNote(newNote);
+            updateNoteController.saveNoteToFile(stage);
+
+            updateNoteController.updateNoteButton.getScene().getWindow().hide();
         });
 
         stage.show();
-
     }
 
+    private String getSceneTitle() throws SQLException {
+        DatabaseHandler databaseHandler = new DatabaseHandler();
+
+        ResultSet userRow = databaseHandler.getUserById(LoginController.currentUserId);
+
+        int counter = 0;
+        String name = "";
+
+        while (userRow.next()) {
+            counter++;
+
+            name = userRow.getString("firstname");
+            gender = userRow.getString("gender");
+            userId = userRow.getInt("userid");
+        }
+
+        if (counter == 1) {
+            String title;
+
+            if (gender == "female") {
+                title = "Ms.";
+            } else {
+                title = "Mr.";
+            }
+
+            return title + name + "'s Notes";
+        } else {
+            return "Notes";
+        }
+    }
 }

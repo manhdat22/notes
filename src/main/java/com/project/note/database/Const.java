@@ -1,7 +1,6 @@
 package com.project.note.database;
 
 public class Const {
-
     public static final String USERS_TABLE = "users";
     public static final String NOTES_TABLE = "notes";
 
@@ -18,5 +17,4 @@ public class Const {
     public static final String NOTES_DATE = "datecreated";
     public static final String NOTES_CONTENT = "content";
     public static final String NOTES_TITLE = "title";
-
 }
